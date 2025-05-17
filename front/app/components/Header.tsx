@@ -31,7 +31,7 @@ const Header: React.FC = () => {
           <a href="#how-it-works" className="text-gray-300 hover:text-white transition-colors">How It Works</a>
           <a href="#showcase" className="text-gray-300 hover:text-white transition-colors">Examples</a>
           <a href="#faq" className="text-gray-300 hover:text-white transition-colors">FAQ</a>
-          <Button variant="primary">Créer ta page</Button>
+          <Button variant="primary">Create Your End</Button>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -53,14 +53,14 @@ const Header: React.FC = () => {
             className="text-gray-300 hover:text-white transition-colors py-2"
             onClick={() => setIsMenuOpen(false)}
           >
-            Comment ça marche
+            How It Works
           </a>
           <a 
             href="#showcase" 
             className="text-gray-300 hover:text-white transition-colors py-2"
             onClick={() => setIsMenuOpen(false)}
           >
-            Example
+            Examples
           </a>
           <a 
             href="#faq" 
