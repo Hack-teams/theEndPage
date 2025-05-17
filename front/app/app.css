@@ -5,58 +5,52 @@
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
-}
-@keyframes wiggle {
-  0%, 100% { transform: rotate(-3deg); }
-  50% { transform: rotate(3deg); }
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fadeInUp {
-  from { 
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to { 
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-wiggle {
-  animation: wiggle 1s ease-in-out infinite;
-}
-
-.animate-shake {
-  animation: shake 0.5s ease-in-out infinite;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out;
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.5s ease-out;
-}
-
-.animate-spin.slow {
-  animation: spin 3s linear infinite;
-}
-
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn {
+          animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .animate-fadeIn.delay-100 {
+          animation-delay: 0.1s;
+        }
+        
+        .modal-enter {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        .modal-enter-active {
+          opacity: 1;
+          transform: scale(1);
+          transition: opacity 300ms, transform 300ms;
+        }
+        .modal-exit {
+          opacity: 1;
+        }
+        .modal-exit-active {
+          opacity: 0;
+          transform: scale(0.9);
+          transition: opacity 300ms, transform 300ms;
+        }
+        
+        .alert-enter {
+          opacity: 0;
+          transform: translate(-50%, 20px);
+        }
+        .alert-enter-active {
+          opacity: 1;
+          transform: translate(-50%, 0);
+          transition: opacity 300ms, transform 300ms;
+        }
+        .alert-exit {
+          opacity: 1;
+          transform: translate(-50%, 0);
+        }
+        .alert-exit-active {
+          opacity: 0;
+          transform: translate(-50%, 20px);
+          transition: opacity 300ms, transform 300ms;
+        }

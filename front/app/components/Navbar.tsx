@@ -6,7 +6,6 @@ const Navbar: React.FC = () => {
     { path: '/', label: 'Home', icon: <Home size={20} /> },
     { path: '/dashboard', label: 'Dash', icon: <List size={20} /> },
     { path: '/contact', label: 'Contact', icon: <Mail size={20} /> },
-    { path: '/moodPageGenerator', label: 'moodPageGenerator', icon: <Mail size={20} /> },
     { path: '/endpage', label: 'EndPage', icon: <Calendar size={20} /> },
   ];
 
