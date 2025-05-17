@@ -3,7 +3,8 @@ import Home from './components/Home';
 import Auth from './components/Auth';
 import Register from './components/Register';
 import './App.css';
-import Showcase from './components/Showcase';
+import Example from './components/Example';
+import HowItWorks from './components/HowItWorks';
 
 function App() {
   return (
@@ -12,7 +13,6 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/showcase" element={<Showcase/>} />
       </Routes>
     </div>
   );

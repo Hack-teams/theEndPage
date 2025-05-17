@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link';
 import { Menu, X } from 'lucide-react';
 import Button from './Button';
 
@@ -29,22 +30,24 @@ const Header = () => {
           </span>
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Navigation de bureau */}
         <nav className="hidden md:flex items-center space-x-8">
-          <Link
-            to="/how-it-works"
+          <HashLink
+            smooth
+            to="/#how-it-works"
             className="text-gray-300 hover:text-white transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
             How It Works
-          </Link>
-          <Link
-            to="/showcase"
+          </HashLink>
+          <HashLink
+            smooth
+            to="/#showcase"
             className="text-gray-300 hover:text-white transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
             Examples
-          </Link>
+          </HashLink>
           <Link
             to="/faq"
             className="text-gray-300 hover:text-white transition-colors"
@@ -68,7 +71,7 @@ const Header = () => {
           </Link>
         </nav>
 
-        {/* Mobile Menu Button */}
+        {/* Bouton du menu mobile */}
         <button 
           className="md:hidden text-white p-2" 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -77,25 +80,27 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Navigation mobile */}
       <div className={`md:hidden transition-all duration-300 overflow-hidden ${
         isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
       } bg-black/95`}>
         <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-          <Link 
-            to="/how-it-works" 
+          <HashLink 
+            smooth
+            to="/#how-it-works" 
             className="text-gray-300 hover:text-white transition-colors py-2"
             onClick={() => setIsMenuOpen(false)}
           >
             How It Works
-          </Link>
-          <Link 
-            to="/showcase" 
+          </HashLink>
+          <HashLink 
+            smooth
+            to="/#showcase" 
             className="text-gray-300 hover:text-white transition-colors py-2"
             onClick={() => setIsMenuOpen(false)}
           >
             Examples
-          </Link>
+          </HashLink>
           <Link 
             to="/faq" 
             className="text-gray-300 hover:text-white transition-colors py-2"

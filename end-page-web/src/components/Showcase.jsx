@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { main } from 'framer-motion/client';
 
  
 const exampleCards = [
