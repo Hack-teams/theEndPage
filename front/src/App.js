@@ -6,6 +6,7 @@ import './App.css';
 import EndPage from './components/EndPage';
 import Faq from './components/Faq';
 import EmailUI from './components/HomePage';
+import Chat from './components/ChatMessage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path='/homePage' element={<EmailUI />}/>
         <Route path="/endpage" element={<EndPage />} />
         <Route path='/faq' element={<Faq />}/>
+        <Route path='chat' element={<Chat/>}/>
       </Routes>
     </div>
   );

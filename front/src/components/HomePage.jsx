@@ -7,7 +7,11 @@ import {
     Home,
     Bookmark,
     Trash,
+    DiscIcon,
+    ChartBar,
+    ChartArea,
 } from "lucide-react";
+import { NavLink } from "react-router-dom";
 
 const posts = [
   {
@@ -63,7 +67,6 @@ function HomePage() {
     photo: "https://via.placeholder.com/80",
   });
 
-  // Nouvelle logique pour récupérer les infos de l'utilisateur
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -197,10 +200,6 @@ export default function EmailUI() {
         return posts;
       case "Home":
         return posts.slice(1, 3);
-      case "bookmarks":
-        return posts.slice(3, 4);
-      case "trash":
-        return [];
       default:
         return posts;
     }
@@ -217,7 +216,6 @@ export default function EmailUI() {
 
   return (
     <div className="h-screen flex flex-col">
-      {/* En-tête inspirant */}
       <header className="p-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white flex items-center gap-4 shadow-md flex-wrap">
         <img
           src="https://via.placeholder.com/80"
@@ -225,6 +223,17 @@ export default function EmailUI() {
           className="w-20 h-20 rounded-full border-4 border-white"
         />
         <h1 className="text-3xl font-bold">The EndPage</h1>
+            <button
+      onClick={handleLogout}
+      className="p-4 rounded-xl bg-violet-500 text-black shadow-md border border-red-600 transition-all duration-300 hover:bg-red-600 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 active:scale-95"
+    >
+      <DiscIcon className="w-5 h-5" /> 
+    </button>
+        <button
+      onClick={handleLogout}
+    >
+      <ChartBar className="w-5 h-5" /> 
+    </button>
       </header>
       
       {/* Contenu principal */}
@@ -255,20 +264,13 @@ export default function EmailUI() {
             }`}
           >
             {tab === "Home" && <Home />}
-            {tab === "bookmarks" && <Bookmark />}
-            {tab === "trash" && <Trash />}
           </button>
+          
         ))}
 
-        {/* Spacer to push the logout button to the bottom */}
         <div className="flex-1" />
 
-        {/* Logout button */}
-        <button
-          onClick={handleLogout} // Remplace handleLogout par ta logique de déconnexion
-          className="p-4 rounded-2xl text-red-600 hover:bg-red-100 transition-transform hover:scale-110"
-        >
-        </button>
+  
       </div>
 
 
@@ -326,6 +328,9 @@ export default function EmailUI() {
               <div className="p-6 bg-gray-50 border rounded-lg shadow-sm">
                 <p className="whitespace-pre-wrap text-gray-800 text-lg">{currentPost.content}</p>
               </div>
+              <NavLink to={"/chat"}>
+                  <ChartArea/>
+              </NavLink>
             </div>
           ) : (
             <p className="text-gray-500 text-center mt-20">No posts to display.</p>
