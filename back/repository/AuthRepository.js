@@ -15,10 +15,11 @@ class AuthUsersRepository {
         return this.repository.findOneBy({ email });
     }
 
-    async save(firstname, lastname, email, password) {
-        const user = { firstname, lastname, email, password};
+    async save(firstname, lastname, email, password, image = null) {
+        const user = { firstname, lastname, email, password, image };
         return this.repository.save(user);
     }
+
 
     async update(id, username, email, password) {
         const user = { id, username, email, password };

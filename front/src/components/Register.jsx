@@ -15,6 +15,13 @@ const RegisterForm = () => {
     confirmPassword: "",
   });
 
+  const [image, setImage] = useState(null);
+
+const handleFileChange = (e) => {
+  setImage(e.target.files[0]);
+};
+
+
   const [passwordStrength, setPasswordStrength] = useState("");
 
   const handleChange = (e) => {
@@ -50,31 +57,35 @@ const RegisterForm = () => {
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (form.password !== form.confirmPassword) {
-      alert("Les mots de passe ne correspondent pas.");
-      return;
-    }
+  if (form.password !== form.confirmPassword) {
+    alert("Les mots de passe ne correspondent pas.");
+    return;
+  }
 
-    try {
-      const formData = {
-        firstname: form.firstname,
-        lastname: form.lastname,
-        email: form.email,
-        password: form.password,
-      };
+  try {
+    const formData = new FormData();
+    formData.append("firstname", form.firstname);
+    formData.append("lastname", form.lastname);
+    formData.append("email", form.email);
+    formData.append("password", form.password);
+    formData.append("image", image); // <- Ajoute l'image ici
 
-      const res = await axios.post("http://localhost:4000/api/auth/register", formData);
+    const res = await axios.post("http://localhost:4000/api/auth/register", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-      const token = res.data.token;
-      localStorage.setItem("token", token);
+    const token = res.data.token;
+    localStorage.setItem("token", token);
+    navigate("/homePage");
+  } catch (err) {
+    alert(err.response?.data?.error || "Une erreur est survenue.");
+  }
+};
 
-      navigate("/accueil");
-    } catch (err) {
-      alert(err.response?.data?.error || "Une erreur est survenue.");
-    }
-  };
 
   return (
     <>
@@ -86,6 +97,7 @@ const RegisterForm = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.6, ease: "easeOut" }}
           className="min-w-xl mx-auto p-6 bg-white rounded-lg shadow space-y-4"
+          encType="multipart/form-data"
         >
           <h2 className="text-2xl font-bold text-center">Inscription</h2>
 
@@ -121,6 +133,18 @@ const RegisterForm = () => {
               className="w-full border border-gray-300 rounded p-2"
             />
           </div>
+
+                  <div className="mb-3">
+          <label>Image</label>
+          <input
+            type="file"
+            name="image"
+            className="form-control"
+            onChange={handleFileChange}
+            accept="image/*"
+            required
+          />
+        </div>
 
           <div>
             <label className="block text-gray-700 mb-1">Mot de passe</label>

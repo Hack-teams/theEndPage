@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ProfilePage from "./ProfilePage";
+import { useNavigate } from "react-router-dom";
 import {
     Home,
     Bookmark,
@@ -172,6 +173,12 @@ export default function EmailUI() {
 
   const filteredPosts = getFilteredPosts();
   const currentPost = filteredPosts[selectedPost];
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
 
   return (
     <div className="h-screen flex flex-col">
@@ -189,39 +196,50 @@ export default function EmailUI() {
       <div className="flex flex-1 flex-col md:flex-row">
         {/* Menu latéral interactif */}
         <div className="w-full md:w-20 bg-white border-r flex flex-row md:flex-col items-center py-6 gap-6 overflow-x-auto md:overflow-visible">
+        <button
+          onClick={() => {
+            setActiveTab("profile");
+            setSelectedPost(0);
+          }}
+          className={`p-1.5 rounded-full transition-transform hover:scale-110 ${activeTab === "profile" ? "ring-2 ring-purple-600" : ""}`}
+        >
+          <img
+            src="https://via.placeholder.com/40"
+            alt="profile"
+            className="rounded-full w-10 h-10"
+          />
+        </button>
+
+        {["Home", "bookmarks", "calendar", "folder", "trash"].map((tab) => (
           <button
+            key={tab}
             onClick={() => {
-              setActiveTab("profile");
+              setActiveTab(tab);
               setSelectedPost(0);
             }}
-            className={`p-1.5 rounded-full transition-transform hover:scale-110 ${activeTab === "profile" ? "ring-2 ring-purple-600" : ""}`}
+            className={`p-4 rounded-2xl transition-transform hover:scale-110 ${
+              activeTab === tab ? "bg-purple-600 text-white" : "hover:bg-gray-200"
+            }`}
           >
-            <img
-              src="https://via.placeholder.com/40"
-              alt="profile"
-              className="rounded-full w-10 h-10"
-            />
+            {tab === "Home" && <Home />}
+            {tab === "bookmarks" && <Bookmark />}
+            {tab === "calendar" && <Calendar />}
+            {tab === "folder" && <Folder />}
+            {tab === "trash" && <Trash />}
           </button>
-          
-          {["Home", "bookmarks", "calendar", "folder", "trash"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => {
-                setActiveTab(tab);
-                setSelectedPost(0);
-              }}
-              className={`p-4 rounded-2xl transition-transform hover:scale-110 ${
-                activeTab === tab ? "bg-purple-600 text-white" : "hover:bg-gray-200"
-              }`}
-            >
-              {tab === "Home" && <Home />}
-              {tab === "bookmarks" && <Bookmark />}
-              {tab === "calendar" && <Calendar />}
-              {tab === "folder" && <Folder />}
-              {tab === "trash" && <Trash />}
-            </button>
-          ))}
-        </div>
+        ))}
+
+        {/* Spacer to push the logout button to the bottom */}
+        <div className="flex-1" />
+
+        {/* Logout button */}
+        <button
+          onClick={handleLogout} // Remplace handleLogout par ta logique de déconnexion
+          className="p-4 rounded-2xl text-red-600 hover:bg-red-100 transition-transform hover:scale-110"
+        >
+        </button>
+      </div>
+
 
         {/* Liste des posts restructurée */}
         {activeTab !== "profile" && (

@@ -6,9 +6,9 @@ class AuthUsersService {
         this.authUsersRepository = authUsersRepository;
     }
 
-    async register(firstname, lastname, email, password) {
+    async register(firstname, lastname, email, password, image) {
         if (!firstname || !lastname || !email || !password) {
-            throw new Error('username, email et password sont requis.');
+            throw new Error('firstname, lastname, email et password sont requis.');
         }
 
         const existingUser = await this.authUsersRepository.findByEmail(email);
@@ -17,8 +17,10 @@ class AuthUsersService {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        return this.authUsersRepository.save(firstname, lastname, email, hashedPassword);
+
+        return this.authUsersRepository.save(firstname, lastname, email, hashedPassword, image);
     }
+
 
     async login(email, password) {
         if (!email || !password) {

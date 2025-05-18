@@ -4,17 +4,26 @@ class AuthUsersController {
     }
 
     async register(req, res) {
-        try {
-            const { firstname, lastname, email, password } = req.body;
-            const newUser = await this.authUsersService.register(firstname, lastname, email, password);
+    try {
+        const { firstname, lastname, email, password } = req.body;
+        const imagePath = req.file ? req.file.filename : null;
 
-            const token = await this.authUsersService.login(email, password);
+        const newUser = await this.authUsersService.register(
+        firstname,
+        lastname,
+        email,
+        password,
+        imagePath
+        );
 
-            res.status(201).json({ user: newUser, token });
-        } catch (error) {
-            res.status(400).json({ error: error.message });
-        }
+        const token = await this.authUsersService.login(email, password);
+
+        res.status(201).json({ user: newUser, token });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
+    }
+
 
 
     async login(req, res) {

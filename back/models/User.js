@@ -1,6 +1,5 @@
-import { EntitySchema, JoinColumn } from "typeorm";
+import { EntitySchema } from "typeorm";
 import TemplatePage from "./TemplatePage.js";
-
 
 const User = new EntitySchema({
   name: "User",
@@ -25,6 +24,10 @@ const User = new EntitySchema({
     },
     password: {
       type: "varchar",
+    },
+    image: {
+      type: "varchar",
+      nullable: true,
     },
   },
   relations: {
