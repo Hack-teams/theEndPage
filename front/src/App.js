@@ -5,6 +5,7 @@ import Register from './components/Register';
 import './App.css';
 import Example from './components/Example';
 import HowItWorks from './components/HowItWorks';
+import EmailUI from './components/HomePage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/register" element={<Register />} />
+        <Route path='/homePage' element={<EmailUI />}/>
       </Routes>
     </div>
   );

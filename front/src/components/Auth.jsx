@@ -24,7 +24,7 @@ const LoginForm = () => {
       const token = res.data.token;
       localStorage.setItem('token', token);
       setFormData({ email: '', password: '' });
-      navigate('/accueil');
+      navigate('/homePage');
     } catch (err) {
       console.log(err.response?.data?.message || 'Erreur lors de la connexion ❌');
     }
