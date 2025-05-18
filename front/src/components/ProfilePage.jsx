@@ -1,14 +1,43 @@
-// ProfilePage.jsx
-import { useState } from "react";
-import FilteredPosts from "./FilteredPosts"; // Importation du composant de filtrage
+import { useEffect, useState } from "react";
+import axios from "axios";
+import FilteredPosts from "./FilteredPosts";
 
 export default function ProfilePage() {
   const [editMode, setEditMode] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    name: "Akhil Gautam",
-    email: "akhil.gautam123@gmail.com",
+    name: "",
+    email: "",
+    image: "",
   });
   const [emotion, setEmotion] = useState("joie");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const response = await axios.get("http://localhost:4000/api/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const user = response.data;
+        setUserInfo({
+          name: `${user.firstname} ${user.lastname}`,
+          email: user.email,
+          image: user.image
+            ? `http://localhost:3000/uploads/${user.image}`
+            : "https://via.placeholder.com/60",
+        });
+      } catch (err) {
+        console.error("Erreur lors de la récupération de l'utilisateur :", err);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const handleChange = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
@@ -20,9 +49,9 @@ export default function ProfilePage() {
       <div className="mb-6">
         <div className="flex items-center gap-4">
           <img
-            src="https://via.placeholder.com/60"
+            src={userInfo.image}
             alt="profile"
-            className="rounded-full w-16 h-16"
+            className="rounded-full w-16 h-16 object-cover"
           />
           <div>
             {editMode ? (
@@ -56,7 +85,7 @@ export default function ProfilePage() {
               {editMode ? "Enregistrer" : "Modifier"}
             </button>
             <button
-              onClick={() => setEditMode(!editMode)}
+              onClick={() => setEditMode(false)}
               className="ml-auto px-4 py-2 bg-purple-600 text-white rounded-md"
             >
               {editMode ? "Annuler" : "Raconter une nouvelle histoire"}
@@ -65,9 +94,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-    
-
-      {/* Intégration des posts filtrés selon l'émotion */}
+      {/* Section des posts filtrés */}
       <div className="mt-6">
         <FilteredPosts defaultFilter={emotion} />
       </div>

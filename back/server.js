@@ -10,6 +10,9 @@ import AuthUsersRepository from "./repository/AuthRepository.js";
 import AuthUsersRoute from "./route/AuthUsersRoute.js";
 import AuthUsersService from "./service/AuthUsersServices.js";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
+
 
 const app = express();
 const port = 4000;
