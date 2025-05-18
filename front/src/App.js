@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './components/Home'; 
 import Auth from './components/Auth';
-import Register from './components/Register';
+import Register, { RegisterForm } from './components/Register';
 import './App.css';
-import Example from './components/Example';
-import HowItWorks from './components/HowItWorks';
+import EndPage from './components/EndPage';
+import Faq from './components/Faq';
 import EmailUI from './components/HomePage';
 
 function App() {
@@ -13,8 +13,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<RegisterForm />} />
         <Route path='/homePage' element={<EmailUI />}/>
+        <Route path="/endpage" element={<EndPage />} />
+        <Route path='/faq' element={<Faq />}/>
       </Routes>
     </div>
   );
