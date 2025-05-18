@@ -4,7 +4,6 @@ export default function Post({ name, email, date, text, image, emotion }) {
   const [expanded, setExpanded] = useState(false);
   const toggleExpand = () => setExpanded(prev => !prev);
 
-  // Mapping des couleurs de fond selon l'émotion
   const emotionBg = {
     joie: "bg-green-100",
     tristesse: "bg-blue-100",
