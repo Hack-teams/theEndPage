@@ -85,7 +85,6 @@ const RegisterForm = () => {
     password: "",
     confirmPassword: "",
   });
-<<<<<<< HEAD
 
   const [image, setImage] = useState(null);
 
@@ -94,9 +93,6 @@ const handleFileChange = (e) => {
 };
 
 
-=======
-  const [errorMessage, setErrorMessage] = useState(""); 
->>>>>>> 09c1ff8f977d436998adc051c89bd13ded72d409
   const [passwordStrength, setPasswordStrength] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
@@ -134,20 +130,9 @@ const handleFileChange = (e) => {
     }
   };
 
-<<<<<<< HEAD
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    
-  const token = localStorage.getItem("token");
-  if (token) {
-    navigate("/homePage");
-  }
-}, [navigate]);
-=======
   const validateForm = () => {
     const newErrors = {};
->>>>>>> 09c1ff8f977d436998adc051c89bd13ded72d409
 
     if (!form.firstname.trim()) newErrors.firstname = "First name is required";
     if (!form.lastname.trim()) newErrors.lastname = "Last name is required";
@@ -170,7 +155,6 @@ const handleFileChange = (e) => {
   };
 
   const handleSubmit = async (e) => {
-<<<<<<< HEAD
   e.preventDefault();
 
   if (form.password !== form.confirmPassword) {
@@ -200,32 +184,7 @@ const handleFileChange = (e) => {
   }
 };
 
-=======
-    e.preventDefault();
-    if (!validateForm()) return;
-    setIsSubmitting(true);
-    setErrorMessage(""); 
-    
-    try {
-      const formData = {
-        firstname: form.firstname,
-        lastname: form.lastname,
-        email: form.email,
-        password: form.password,
-      };
-
-      const res = await axios.post("http://localhost:4000/api/auth/register", formData);
-      const token = res.data.token;
-      localStorage.setItem("token", token);
-      navigate("/accueil");
-    } catch (err) {
-      console.error("Registration error:", err);
-      setErrorMessage(err.response?.data?.error || "An error occurred during registration. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
->>>>>>> 09c1ff8f977d436998adc051c89bd13ded72d409
+   
 
   return (
     <>
@@ -293,15 +252,9 @@ const handleFileChange = (e) => {
           onSubmit={handleSubmit}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-<<<<<<< HEAD
           transition={{ duration: 1.6, ease: "easeOut" }}
           className="min-w-xl mx-auto p-6 bg-white rounded-lg shadow space-y-4"
           encType="multipart/form-data"
-=======
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="w-full max-w-lg p-8 bg-black/30 backdrop-blur-md rounded-3xl shadow-xl space-y-6 lg:ml-12 z-10 border border-white/10"
-          aria-label="Registration form"
->>>>>>> 09c1ff8f977d436998adc051c89bd13ded72d409
         >
           <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ delay: 0.3 }}>
             <h2 className="text-4xl font-extrabold text-center text-white">Sign Up</h2>
