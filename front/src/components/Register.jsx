@@ -416,4 +416,248 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+const LoginForm = () => {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = "Please enter a valid email";
+    }
+    if (!form.password) {
+      newErrors.password = "Password is required";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    setIsSubmitting(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("Login successful", form);
+    } catch (error) {
+      console.error("Login error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePosition({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  return (
+    <>
+      <Header />
+      <div
+        className="relative flex flex-col lg:flex-row items-center justify-center min-h-screen p-6 overflow-hidden"
+        onMouseMove={handleMouseMove}
+      >
+        <AnimatedBackground />
+        
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm z-0"></div>
+        
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="lg:w-1/2 flex flex-col justify-center items-center relative mb-8 lg:mb-0 z-10"
+        >
+          <div className="relative h-64 w-full flex justify-center items-end">
+            <motion.div
+              className="absolute bottom-0 left-1/4"
+              animate={{
+                y: [0, -10, 0],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 5,
+                ease: "easeInOut",
+              }}
+            >
+              <img
+                src={trees}
+                alt="Forest background"
+                className="w-64 h-64 drop-shadow-2xl opacity-90"
+              />
+            </motion.div>
+            <motion.img
+              src={tree}
+              alt="Main tree"
+              className="w-48 h-48 drop-shadow-2xl relative z-10"
+              animate={{
+                y: [0, -15, 0],
+                rotate: [0, 3, -3, 0],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 6,
+                ease: "easeInOut",
+              }}
+              whileHover={{ scale: 1.05 }}
+            />
+            <motion.img
+              src={leaf}
+              alt="Floating leaf"
+              className="w-12 h-12 drop-shadow-xl absolute top-1/4 right-1/4"
+              animate={{
+                x: [0, 15, 0],
+                y: [0, -15, 0],
+                rotate: [0, 10, 0],
+                opacity: [0.6, 0.9, 0.6],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 4,
+                ease: "easeInOut",
+              }}
+            />
+          </div>
+        </motion.div>
+
+        <motion.form
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="w-full max-w-lg p-8 bg-black/30 backdrop-blur-md rounded-3xl shadow-2xl space-y-6 lg:ml-12 z-10 border border-white/10"
+          whileHover={{ boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.2)" }}
+          aria-label="Login form"
+        >
+          <motion.div
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.3, type: "spring", stiffness: 120 }}
+          >
+            <h2 className="text-4xl font-extrabold text-center text-white">Welcome Back</h2>
+            <p className="text-center text-white/80 mt-2">Log in to your account</p>
+          </motion.div>
+
+          <div>
+            <label htmlFor="email" className="block text-white/80 text-sm font-semibold mb-1.5">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              className={`w-full border-2 rounded-xl p-3 text-white bg-white/10 placeholder-white/50 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${errors.email ? "border-red-400" : "border-white/20"}`}
+              placeholder="your@email.com"
+              aria-invalid={errors.email ? "true" : "false"}
+            />
+            {errors.email && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-red-400 text-xs mt-1.5"
+                role="alert"
+              >
+                {errors.email}
+              </motion.p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-white/80 text-sm font-semibold mb-1.5">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              className={`w-full border-2 rounded-xl p-3 text-white bg-white/10 placeholder-white/50 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${errors.password ? "border-red-400" : "border-white/20"}`}
+              placeholder="••••••••"
+              aria-invalid={errors.password ? "true" : "false"}
+            />
+            {errors.password && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-red-400 text-xs mt-1.5"
+                role="alert"
+              >
+                {errors.password}
+              </motion.p>
+            )}
+          </div>
+
+          <motion.button
+            type="submit"
+            whileHover={{ scale: 1.05, backgroundColor: "#7C3AED" }}
+            whileTap={{ scale: 0.95 }}
+            disabled={isSubmitting}
+            className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-300 ${isSubmitting ? "bg-purple-400/50 cursor-not-allowed" : "bg-purple-600 shadow-lg"}`}
+            aria-busy={isSubmitting}
+          >
+            {isSubmitting ? (
+              <div className="flex items-center justify-center">
+                <svg
+                  className="animate-spin mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  ></path>
+                </svg>
+                Logging in...
+              </div>
+            ) : (
+              "Log In"
+            )}
+          </motion.button>
+
+          <motion.div
+            className="text-center text-sm text-white/80"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            Don't have an account?{" "}
+            <NavLink
+              to="/register"
+              className="text-purple-300 hover:text-purple-400 font-semibold transition-colors"
+            >
+              Sign up
+            </NavLink>
+          </motion.div>
+        </motion.form>
+      </div>
+    </>
+  );
+};
+
+export { RegisterForm, LoginForm };
