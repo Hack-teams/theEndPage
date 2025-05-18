@@ -1,19 +1,33 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { motion } from "framer-motion";
+import axios from 'axios';
 
 const LoginForm = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+    const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Connexion avec :", form);
+
+    try {
+      const res = await axios.post('http://localhost:4000/api/auth/login', formData);
+      const token = res.data.token;
+      localStorage.setItem('token', token);
+      setFormData({ email: '', password: '' });
+      navigate('/accueil');
+    } catch (err) {
+      console.log(err.response?.data?.message || 'Erreur lors de la connexion ❌');
+    }
   };
 
   return (
@@ -34,7 +48,7 @@ const LoginForm = () => {
             <input
               type="email"
               name="email"
-              value={form.email}
+              value={formData.email}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded p-2"
               required
@@ -46,7 +60,7 @@ const LoginForm = () => {
             <input
               type="password"
               name="password"
-              value={form.password}
+              value={formData.password}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded p-2"
               required

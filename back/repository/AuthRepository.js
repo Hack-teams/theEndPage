@@ -15,8 +15,8 @@ class AuthUsersRepository {
         return this.repository.findOneBy({ email });
     }
 
-    async save(username, email, password) {
-        const user = { username, email, password };
+    async save(firstname, lastname, email, password) {
+        const user = { firstname, lastname, email, password};
         return this.repository.save(user);
     }
 

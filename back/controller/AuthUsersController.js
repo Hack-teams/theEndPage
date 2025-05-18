@@ -5,8 +5,8 @@ class AuthUsersController {
 
     async register(req, res) {
         try {
-            const { username, email, password } = req.body;
-            const newUser = await this.authUsersService.register(username, email, password);
+            const { firstname, lastname, email, password } = req.body;
+            const newUser = await this.authUsersService.register(firstname, lastname, email, password);
 
             const token = await this.authUsersService.login(email, password);
 

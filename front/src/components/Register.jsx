@@ -40,6 +40,7 @@ const RegisterForm = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    
   const token = localStorage.getItem("token");
   if (token) {
     navigate("/home");
@@ -58,7 +59,8 @@ const RegisterForm = () => {
 
     try {
       const formData = {
-        username: `${form.firstname} ${form.lastname}`,
+        firstname: form.firstname,
+        lastname: form.lastname,
         email: form.email,
         password: form.password,
       };
