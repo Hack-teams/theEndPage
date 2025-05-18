@@ -26,11 +26,18 @@ const Header = () => {
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center">
           <span className="text-white font-bold text-2xl">
-            TheEnd<span className="text-red-500">.</span>page
+            <HashLink
+            smooth
+            to="/endpage"
+            className="text-gray-300 hover:text-white transition-colors"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            TheEnd<span className="text-violet-500">.</span>page
+          </HashLink>
           </span>
+    
         </div>
 
-        {/* Navigation de bureau */}
         <nav className="hidden md:flex items-center space-x-8">
           <HashLink
             smooth
@@ -56,7 +63,7 @@ const Header = () => {
             FAQ
           </Link>
           <Link 
-            to="/auth" 
+            to="/login" 
             className="text-gray-300 hover:text-white transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >
