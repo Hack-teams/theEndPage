@@ -2,6 +2,9 @@ import { motion } from "framer-motion";
 import React, { useState } from "react";
 import Header from "../components/Header";
 import { NavLink } from "react-router";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const RegisterForm = () => {
   const [form, setForm] = useState({
@@ -34,9 +37,41 @@ const RegisterForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    navigate("/home");
+  }
+}, [navigate]);
+
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+
+    if (form.password !== form.confirmPassword) {
+      alert("Les mots de passe ne correspondent pas.");
+      return;
+    }
+
+    try {
+      const formData = {
+        username: `${form.firstname} ${form.lastname}`,
+        email: form.email,
+        password: form.password,
+      };
+
+      const res = await axios.post("http://localhost:4000/api/auth/register", formData);
+
+      const token = res.data.token;
+      localStorage.setItem("token", token);
+
+      navigate("/accueil");
+    } catch (err) {
+      alert(err.response?.data?.error || "Une erreur est survenue.");
+    }
   };
 
   return (

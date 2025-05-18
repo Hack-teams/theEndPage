@@ -7,11 +7,15 @@ class AuthUsersController {
         try {
             const { username, email, password } = req.body;
             const newUser = await this.authUsersService.register(username, email, password);
-            res.status(201).json(newUser);
+
+            const token = await this.authUsersService.login(email, password);
+
+            res.status(201).json({ user: newUser, token });
         } catch (error) {
             res.status(400).json({ error: error.message });
         }
     }
+
 
     async login(req, res) {
         try {
