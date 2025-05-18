@@ -51,18 +51,19 @@ class AuthUsersService {
         return this.authUsersRepository.findById(id);
     }
 
-    async updateUser(id, username, email, password) {
-        if (!id || !username || !email) {
-            throw new Error('id, username et email sont requis.');
-        }
-
-        let hashedPassword;
-        if (password) {
-            hashedPassword = await bcrypt.hash(password, 10);
-        }
-
-        return this.authUsersRepository.update(id, username, email, hashedPassword);
+    async updateUser(id, username, email, password, image) {
+    if (!id || !username || !email) {
+        throw new Error('id, username et email sont requis.');
     }
+
+    let hashedPassword = null;
+    if (password) {
+        hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    return this.authUsersRepository.update(id, username, email, hashedPassword, image);
+    }
+
 
     async deleteUser(id) {
         if (!id) {

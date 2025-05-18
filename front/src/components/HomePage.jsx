@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import ProfilePage from "./ProfilePage";
 import { useNavigate } from "react-router-dom";
 import {
+    User,
     Home,
     Bookmark,
-    Calendar,
-    Folder,
     Trash,
 } from "lucide-react";
 
@@ -63,6 +63,41 @@ function HomePage() {
     photo: "https://via.placeholder.com/80",
   });
 
+  // Nouvelle logique pour récupérer les infos de l'utilisateur
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        const response = await axios.get("http://localhost:4000/api/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = response.data;
+        console.log("User data:", data);
+
+        // Vérification de l'image
+        const photoUrl =
+          data.image && data.image.trim() !== ""
+            ? `http://localhost:4000/uploads/${data.image}`
+            : "/default-profile.png";
+
+        setUser({
+          name: `${data.firstname} ${data.lastname}`,
+          email: data.email,
+          photo: photoUrl,
+        });
+      } catch (err) {
+        console.error("Erreur lors de la récupération de l'utilisateur :", err);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
@@ -81,6 +116,10 @@ function HomePage() {
         <img 
           src={user.photo} 
           alt="profile" 
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "/default-profile.png";
+          }} 
           className="w-20 md:w-24 h-20 md:h-24 rounded-full border-4 border-white" 
         />
         {!isEditing ? (
@@ -160,10 +199,6 @@ export default function EmailUI() {
         return posts.slice(1, 3);
       case "bookmarks":
         return posts.slice(3, 4);
-      case "calendar":
-        return posts.slice(4, 5);
-      case "folder":
-        return posts.slice(5, 6);
       case "trash":
         return [];
       default:
@@ -201,16 +236,14 @@ export default function EmailUI() {
             setActiveTab("profile");
             setSelectedPost(0);
           }}
-          className={`p-1.5 rounded-full transition-transform hover:scale-110 ${activeTab === "profile" ? "ring-2 ring-purple-600" : ""}`}
+          className={`p-1.5 rounded-full transition-transform hover:scale-110 ${
+            activeTab === "profile" ? "ring-2 ring-purple-600" : ""
+          }`}
         >
-          <img
-            src="https://via.placeholder.com/40"
-            alt="profile"
-            className="rounded-full w-10 h-10"
-          />
+          <User className="w-10 h-10 text-gray-700" />
         </button>
 
-        {["Home", "bookmarks", "calendar", "folder", "trash"].map((tab) => (
+        {["Home", "bookmarks", "trash"].map((tab) => (
           <button
             key={tab}
             onClick={() => {
@@ -223,8 +256,6 @@ export default function EmailUI() {
           >
             {tab === "Home" && <Home />}
             {tab === "bookmarks" && <Bookmark />}
-            {tab === "calendar" && <Calendar />}
-            {tab === "folder" && <Folder />}
             {tab === "trash" && <Trash />}
           </button>
         ))}
@@ -304,4 +335,3 @@ export default function EmailUI() {
     </div>
   );
 }
-

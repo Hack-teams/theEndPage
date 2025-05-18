@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import "reflect-metadata";
 import TemplatePageController from "./controller/TemplatePageController.js";
 import { AppDataSource } from "./data-source.js";
@@ -24,6 +25,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Servir le dossier "uploads" pour l'accès aux fichiers statiques
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 AppDataSource.initialize()
 

@@ -21,10 +21,19 @@ class AuthUsersRepository {
     }
 
 
-    async update(id, username, email, password) {
-        const user = { id, username, email, password };
-        return this.repository.save(user);
+    async update(id, username, email, hashedPassword, image) {
+        const user = await this.findById(id);
+        if (!user) throw new Error('Utilisateur non trouvé.');
+
+        user.firstname = username.split(" ")[0];
+        user.lastname = username.split(" ")[1] || "";
+        user.email = email;
+        if (hashedPassword) user.password = hashedPassword;
+        if (image) user.image = image;
+
+        return this.dataSource.getRepository(UserEntity).save(user);
     }
+
 
     async delete({ id }) {
         return this.repository.delete({ id });
