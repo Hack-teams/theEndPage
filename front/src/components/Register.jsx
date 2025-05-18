@@ -1,10 +1,81 @@
 import { motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
-import { NavLink } from "react-router";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import tree from "../assets/tree.png";
+import trees from "../assets/trees.png";
+import leaf from "../assets/leaf.png";
+
+const FloatingLeaves = ({ count = 12 }) => {
+  const leaves = Array.from({ length: count }).map((_, i) => ({
+    id: i,
+    size: Math.random() * 20 + 10,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    rotate: Math.random() * 360,
+    duration: Math.random() * 10 + 10,
+    delay: Math.random() * 5
+  }));
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {leaves.map((leaf) => (
+        <motion.div
+          key={leaf.id}
+          className="absolute"
+          style={{
+            width: `${leaf.size}px`,
+            height: `${leaf.size}px`,
+            left: `${leaf.x}%`,
+            top: `${leaf.y}%`,
+            rotate: `${leaf.rotate}deg`,
+            backgroundImage: `url(${leaf})`,
+            backgroundSize: 'contain',
+            backgroundRepeat: 'no-repeat',
+            opacity: 0.7
+          }}
+          animate={{
+            y: [0, -100, -200],
+            x: [0, 50, 0],
+            rotate: [0, 180, 360],
+            opacity: [0.5, 0.8, 0.5]
+          }}
+          transition={{
+            duration: leaf.duration,
+            delay: leaf.delay,
+            repeat: Infinity,
+            repeatType: "loop",
+            ease: "linear"
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+const AnimatedBackground = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      <motion.div 
+        className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511497584788-876760111969')] bg-cover bg-center"
+        animate={{
+          scale: [1, 1.05, 1],
+          opacity: [0.9, 0.95, 0.9]
+        }}
+        transition={{
+          duration: 15,
+          repeat: Infinity,
+          repeatType: "reverse",
+          ease: "easeInOut"
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/80 via-purple-900/80 to-gray-900/80 backdrop-blur-sm" />
+      <FloatingLeaves />
+    </div>
+  );
+};
 
 const RegisterForm = () => {
   const [form, setForm] = useState({
@@ -14,6 +85,7 @@ const RegisterForm = () => {
     password: "",
     confirmPassword: "",
   });
+<<<<<<< HEAD
 
   const [image, setImage] = useState(null);
 
@@ -22,7 +94,21 @@ const handleFileChange = (e) => {
 };
 
 
+=======
+  const [errorMessage, setErrorMessage] = useState(""); 
+>>>>>>> 09c1ff8f977d436998adc051c89bd13ded72d409
   const [passwordStrength, setPasswordStrength] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/home");
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,6 +116,10 @@ const handleFileChange = (e) => {
 
     if (name === "password") {
       checkPasswordStrength(value);
+    }
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -44,6 +134,7 @@ const handleFileChange = (e) => {
     }
   };
 
+<<<<<<< HEAD
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,10 +144,33 @@ const handleFileChange = (e) => {
     navigate("/homePage");
   }
 }, [navigate]);
+=======
+  const validateForm = () => {
+    const newErrors = {};
+>>>>>>> 09c1ff8f977d436998adc051c89bd13ded72d409
 
+    if (!form.firstname.trim()) newErrors.firstname = "First name is required";
+    if (!form.lastname.trim()) newErrors.lastname = "Last name is required";
+    if (!form.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      newErrors.email = "Please enter a valid email";
+    }
+    if (!form.password) {
+      newErrors.password = "Password is required";
+    } else if (passwordStrength === "weak") {
+      newErrors.password = "Password must be stronger";
+    }
+    if (form.password !== form.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
 
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
+<<<<<<< HEAD
   e.preventDefault();
 
   if (form.password !== form.confirmPassword) {
@@ -86,52 +200,178 @@ const handleFileChange = (e) => {
   }
 };
 
+=======
+    e.preventDefault();
+    if (!validateForm()) return;
+    setIsSubmitting(true);
+    setErrorMessage(""); 
+    
+    try {
+      const formData = {
+        firstname: form.firstname,
+        lastname: form.lastname,
+        email: form.email,
+        password: form.password,
+      };
+
+      const res = await axios.post("http://localhost:4000/api/auth/register", formData);
+      const token = res.data.token;
+      localStorage.setItem("token", token);
+      navigate("/accueil");
+    } catch (err) {
+      console.error("Registration error:", err);
+      setErrorMessage(err.response?.data?.error || "An error occurred during registration. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+>>>>>>> 09c1ff8f977d436998adc051c89bd13ded72d409
 
   return (
     <>
       <Header />
-      <div className="flex flex-col items-center justify-center w-screen h-screen text-gray-700 bg-gradient-to-br from-gray-900 via-purple-950 to-black">
+      <div className="relative flex flex-col lg:flex-row items-center justify-center min-h-screen p-6">
+        <AnimatedBackground />
+        
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm z-0"></div>
+        
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="lg:w-1/2 flex flex-col justify-center items-center relative mb-8 lg:mb-0 z-10"
+        >
+          <div className="relative h-64 w-full flex justify-center items-end">
+            <motion.img
+              src={trees}
+              alt="Forest background"
+              className="w-64 h-64 drop-shadow-2xl absolute bottom-0 left-1/4"
+              animate={{
+                y: [0, -5, 0],
+                opacity: [0.8, 1, 0.8],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 6,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.img
+              src={tree}
+              alt="Main tree"
+              className="w-48 h-48 drop-shadow-2xl relative z-10"
+              animate={{
+                y: [0, -10, 0],
+                rotate: [0, 2, -2, 0],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 4,
+                ease: "easeInOut",
+              }}
+            />
+            <motion.img
+              src={leaf}
+              alt="Floating leaf"
+              className="w-12 h-12 drop-shadow-xl absolute top-1/4 right-1/4"
+              animate={{
+                x: [0, 15, 0],
+                y: [0, -15, 0],
+                rotate: [0, 10, 0],
+                opacity: [0.6, 0.9, 0.6],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 4,
+                ease: "easeInOut",
+              }}
+            />
+          </div>
+        </motion.div>
+
         <motion.form
           onSubmit={handleSubmit}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
+<<<<<<< HEAD
           transition={{ duration: 1.6, ease: "easeOut" }}
           className="min-w-xl mx-auto p-6 bg-white rounded-lg shadow space-y-4"
           encType="multipart/form-data"
+=======
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="w-full max-w-lg p-8 bg-black/30 backdrop-blur-md rounded-3xl shadow-xl space-y-6 lg:ml-12 z-10 border border-white/10"
+          aria-label="Registration form"
+>>>>>>> 09c1ff8f977d436998adc051c89bd13ded72d409
         >
-          <h2 className="text-2xl font-bold text-center">Inscription</h2>
+          <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ delay: 0.3 }}>
+            <h2 className="text-4xl font-extrabold text-center text-white">Sign Up</h2>
+            <p className="text-center text-white/80 mt-2">Create your account to get started</p>
+          </motion.div>
 
-          <div>
-            <label className="block text-gray-700 mb-1">Nom</label>
-            <input
-              type="text"
-              name="lastname"
-              value={form.lastname}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded p-2"
-            />
+          {errorMessage && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-red-400 text-center p-2 rounded-lg bg-red-900/30"
+            >
+              {errorMessage}
+            </motion.div>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {["firstname", "lastname"].map((field, i) => (
+              <div key={i}>
+                <label htmlFor={field} className="block text-white/80 text-sm font-semibold mb-1.5 capitalize">
+                  {field.replace("name", " Name")}
+                </label>
+                <input
+                  id={field}
+                  type="text"
+                  name={field}
+                  value={form[field]}
+                  onChange={handleChange}
+                  placeholder={field === "firstname" ? "John" : "Doe"}
+                  className={`w-full border-2 rounded-xl p-3 text-white bg-white/10 placeholder-white/50 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${errors[field] ? "border-red-400" : "border-white/20"}`}
+                  aria-invalid={errors[field] ? "true" : "false"}
+                />
+                {errors[field] && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-red-400 text-xs mt-1.5"
+                    role="alert"
+                  >
+                    {errors[field]}
+                  </motion.p>
+                )}
+              </div>
+            ))}
           </div>
 
           <div>
-            <label className="block text-gray-700 mb-1">Prénom</label>
+            <label htmlFor="email" className="block text-white/80 text-sm font-semibold mb-1.5">
+              Email
+            </label>
             <input
-              type="text"
-              name="firstname"
-              value={form.firstname}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded p-2"
-            />
-          </div>
-
-          <div>
-            <label className="block text-gray-700 mb-1">Email</label>
-            <input
+              id="email"
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded p-2"
+              className={`w-full border-2 rounded-xl p-3 text-white bg-white/10 placeholder-white/50 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${errors.email ? "border-red-400" : "border-white/20"}`}
+              placeholder="your@email.com"
+              aria-invalid={errors.email ? "true" : "false"}
             />
+            {errors.email && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-400 text-xs mt-1.5"
+                role="alert"
+              >
+                {errors.email}
+              </motion.p>
+            )}
           </div>
 
                   <div className="mb-3">
@@ -147,45 +387,102 @@ const handleFileChange = (e) => {
         </div>
 
           <div>
-            <label className="block text-gray-700 mb-1">Mot de passe</label>
+            <label htmlFor="password" className="block text-white/80 text-sm font-semibold mb-1.5">
+              Password
+            </label>
             <input
+              id="password"
               type="password"
               name="password"
               value={form.password}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded p-2"
+              className={`w-full border-2 rounded-xl p-3 text-white bg-white/10 placeholder-white/50 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${errors.password ? "border-red-400" : "border-white/20"}`}
+              placeholder="••••••••"
+              aria-invalid={errors.password ? "true" : "false"}
             />
-            {passwordStrength === "weak" && (
-              <p className="text-red-500 text-sm mt-1">
-                Mot de passe trop faible (min. 8 caractères, 1 majuscule, 1 chiffre)
-              </p>
+            {passwordStrength && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className={`text-xs mt-1.5 ${passwordStrength === "weak" ? "text-red-400" : "text-green-400"}`}
+              >
+                {passwordStrength === "weak" ? "Password too weak (min. 8 chars, 1 uppercase, 1 number)" : "Strong password"}
+              </motion.div>
             )}
-            {passwordStrength === "strong" && (
-              <p className="text-green-600 text-sm mt-1">Mot de passe sécurisé ✅</p>
+            {errors.password && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-400 text-xs mt-1.5"
+                role="alert"
+              >
+                {errors.password}
+              </motion.p>
             )}
           </div>
 
           <div>
-            <label className="block text-gray-700 mb-1">Confirmer le mot de passe</label>
+            <label htmlFor="confirmPassword" className="block text-white/80 text-sm font-semibold mb-1.5">
+              Confirm Password
+            </label>
             <input
+              id="confirmPassword"
               type="password"
               name="confirmPassword"
               value={form.confirmPassword}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded p-2"
+              className={`w-full border-2 rounded-xl p-3 text-white bg-white/10 placeholder-white/50 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 ${errors.confirmPassword ? "border-red-400" : "border-white/20"}`}
+              placeholder="••••••••"
+              aria-invalid={errors.confirmPassword ? "true" : "false"}
             />
+            {errors.confirmPassword && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-red-400 text-xs mt-1.5"
+                role="alert"
+              >
+                {errors.confirmPassword}
+              </motion.p>
+            )}
           </div>
 
-          <button
+          <motion.button
             type="submit"
-            className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.95 }}
+            disabled={isSubmitting}
+            className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-300 ${isSubmitting ? "bg-purple-400/50 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-700 shadow-lg"}`}
+            aria-busy={isSubmitting}
           >
-            S'inscrire
-          </button>
+            {isSubmitting ? (
+              <div className="flex items-center justify-center">
+                <svg
+                  className="animate-spin mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  ></path>
+                </svg>
+                Registering...
+              </div>
+            ) : (
+              "Sign Up"
+            )}
+          </motion.button>
 
-          <NavLink to="/auth" className="text-blue-600 hover:underline text-sm block text-center">
-            Se connecter
-          </NavLink>
+          <div className="text-center text-sm text-white/80">
+            Already have an account?{" "}
+            <NavLink to="/auth" className="text-purple-300 hover:text-purple-400 font-semibold transition-colors">
+              Log in
+            </NavLink>
+          </div>
         </motion.form>
       </div>
     </>
