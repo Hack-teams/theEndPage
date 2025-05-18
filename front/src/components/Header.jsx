@@ -63,7 +63,7 @@ const Header = () => {
             FAQ
           </Link>
           <Link 
-            to="/login" 
+            to="/auth" 
             className="text-gray-300 hover:text-white transition-colors"
             onClick={() => setIsMenuOpen(false)}
           >

@@ -96,6 +96,7 @@ const handleFileChange = (e) => {
   const [passwordStrength, setPasswordStrength] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
+  const [errorMessage, setErrorMessage] = ("");
 
   const navigate = useNavigate();
 
@@ -156,6 +157,7 @@ const handleFileChange = (e) => {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
+  setErrorMessage("");
 
   if (form.password !== form.confirmPassword) {
     alert("Les mots de passe ne correspondent pas.");
